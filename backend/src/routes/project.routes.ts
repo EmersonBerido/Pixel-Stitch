@@ -5,3 +5,5 @@ const router = Router();
 
 router.get('/:user-id', getProject);
 router.post('/', createProject);
+
+export default router;

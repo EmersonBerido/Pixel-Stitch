@@ -1,4 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
+import bcrpytjs from 'bcryptjs';
+import { findUserByEmail, addUser } from "../db/users/users.db";
 
 function authLogin(req: Request, res: Response) {
   // TODO: Implement login logic
@@ -13,17 +15,19 @@ function authLogin(req: Request, res: Response) {
   res.send('Login route');
 }
 
-function authRegister(req: Request, res: Response) {
-  // TODO: Implement registration logic
-  // Get user details from req.body
+async function authRegister(req: Request, res: Response) {
+  const { email, username, password } = req.body;
 
-  // Check if email already exists, return 409 Conflict if so
+  // Check if email already exists
+  const emailExists = await findUserByEmail(email);
+  if (emailExists) return res.status(409).send('Email already in use');
 
   // Bcrypt password and save new user to database
-
-  // Return success response
-
-  res.send('Register route');
+  const hashedPassword = await bcrpytjs.hash(password, process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10);
+  const insertSuccess = await addUser(email, username, hashedPassword);
+  if (!insertSuccess) return res.status(500).send('Internal server error');
+  
+  res.status(201).send('Successfully registered user');
 }
 
 function authForgotPassword(req: Request, res: Response) {
