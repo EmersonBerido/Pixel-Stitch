@@ -1,4 +1,5 @@
 import { supabase } from "../../supabaseClient";
+import bcryptjs from "bcryptjs";
 
 
 async function findUserByEmail(email: string){
@@ -38,4 +39,37 @@ async function addUser(email: string, username: string, hashedPassword: string){
   return true;
 }
 
-export { findUserByEmail, addUser };
+async function verifyUserCredentials(email: string, password: string){
+  // Get all user with given email
+  const {data, error} = await supabase
+    .from("Users")
+    .select("*")
+    .eq("email", email);
+  
+  if (error) {
+    console.error('Error fetching user by email:', error);
+    return false;
+  }
+
+  if (!data || data.length === 0) return false;
+
+  // Compare given password with stored hashed password using bcryptjs
+  const hashedPassword = await bcryptjs.compare(password, data[0].password);
+  return hashedPassword;
+}
+
+async function getIdByEmail(email: string){
+  const {data, error} = await supabase
+    .from("Users")
+    .select("id")
+    .eq("email", email);
+
+  if (error) {
+    console.error('Error fetching user ID by email:', error);
+    return null;
+  }
+
+  return data && data.length > 0 ? data[0].id : null;
+}
+
+export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail };

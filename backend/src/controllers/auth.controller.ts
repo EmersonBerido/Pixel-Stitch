@@ -1,18 +1,23 @@
-import { Request, Response } from "express";
+import jwt from 'jsonwebtoken';
 import bcrpytjs from 'bcryptjs';
-import { findUserByEmail, addUser } from "../db/users/users.db";
+import { Request, Response } from "express";
+import { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail } from "../db/users/users.db";
 
-function authLogin(req: Request, res: Response) {
-  // TODO: Implement login logic
-  
-  // Get credentials from req.body
+async function authLogin(req: Request, res: Response) {
+  const { email, password } = req.body;
 
-  // Validate credentials
+  // Check for valid credentials
+  const isValid = await verifyUserCredentials(email, password);
+  if (!isValid) return res.status(401).send('Invalid email or password');
 
-  // If invalid, return 401 Unauthorized
+  // Get User ID from database
+  const userId = await getIdByEmail(email);
+  if (!userId) return res.status(500).send('Internal server error');
 
   // If valid, generate JWT token and return it
-  res.send('Login route');
+  const payload = { id: userId, email : email};
+  const token = jwt.sign(payload , process.env.JWT_SECRET as string, { expiresIn: '1h' });
+  res.json({token});
 }
 
 async function authRegister(req: Request, res: Response) {
