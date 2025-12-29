@@ -72,4 +72,20 @@ async function getIdByEmail(email: string){
   return data && data.length > 0 ? data[0].id : null;
 }
 
-export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail };
+async function changePasswordByEmail(email: string, newHashedPassword: string) {
+  // Get User to update
+  const { data, error } = await supabase
+    .from("Users")
+    .update({ password: newHashedPassword })
+    .eq("email", email)
+    .select();
+  
+  if (error) return false;
+  
+  // If User doesn't exist
+  if (data.length === 0) return false;
+  
+  return true;
+}
+
+export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail };

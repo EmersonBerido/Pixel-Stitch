@@ -21,13 +21,7 @@ app.use('/projects', projectRoutes);
 
 app.get('/', (req, res) => {
   console.log('Request received at / endpoint');
-  const token = jwt.sign({ id: 123456 }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-  res.json({ token });
-});
-
-app.get('/testToken', verifyToken, (req, res) => {
-  console.log('Request received at /testToken endpoint');
-  res.send(`Token is valid. User ID: ${req.user.id}`);
+  res.send('Pixel Stitch Backend is running');
 });
 
 
