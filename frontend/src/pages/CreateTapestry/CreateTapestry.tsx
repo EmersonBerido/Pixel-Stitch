@@ -1,6 +1,9 @@
 import { useState } from "react";
-import {Chrome} from "@uiw/react-color"
+import {Chrome} from "@uiw/react-color";
+import { useNavigate } from "react-router-dom";
+
 function CreateTapestry() {
+  const Navigate = useNavigate();
   // Grid states
   const defaultValue = "#FFFFFF"
   const [gridRowLength, setGridRowLength] = useState<number>(20);
@@ -33,8 +36,8 @@ function CreateTapestry() {
   function UpdateGridSize(updateRow : boolean, change : number){
     if (updateRow){
       // Update how many rows
+      const newLength = gridRowLength + change;
       setGrid(prev => {
-        const newLength = gridRowLength + change;
 
         if (newLength > gridRowLength){
 
@@ -58,14 +61,14 @@ function CreateTapestry() {
     }
     else {
       // Update how many columns
+      const newLength = gridColLength + change
       setGrid(prev => 
-        prev.map((currRow, rowIndex) => {
-          const newLength = gridColLength + change
+        prev.map(currRow => {
 
           if (newLength > currRow.length) {
             // Add columns
             const extra = Array.from(
-              {length : newLength},
+              {length : newLength - currRow.length},
               () => defaultValue
             );
             return [...currRow, ...extra]
@@ -96,8 +99,17 @@ function CreateTapestry() {
     
   }
 
-  //Event handlers
+  function SaveGrid(){
+    // Check if user is logged in
 
+    // If logged in, send to CreateProject and pass in grid as a prop
+
+    // If not, save grid to localStorage and sent to Tapestry
+    localStorage.setItem("grid", JSON.stringify(grid));
+    Navigate("/tapestry/-1");
+  }
+
+  //Event handlers
   function handleMouseDown(row : number, col : number){
     setIsDrawing(true);
     paintPixel(row, col);
@@ -110,8 +122,6 @@ function CreateTapestry() {
   function handleMouseUp() {
     setIsDrawing(false);
   }
-
-  // function Up
 
   return (
     <main>
@@ -139,7 +149,7 @@ function CreateTapestry() {
                 style={{
                   width : 20,
                   height : 20,
-                  border : "1px solid pink",
+                  border : "0.5px solid grey",
                   background : pixel === currentColor ? currentColor : pixel
                 }}
               />
@@ -147,20 +157,25 @@ function CreateTapestry() {
           )
         }
       </div>
+
       <button onClick={() => setGrid(clearGrid)}>Clear Grid</button>
       <button onClick={() => console.log(grid)}>Log Grid</button>
+      <button onClick={SaveGrid}>Save</button>
+
       <div style={{background : "pink", zIndex : 2}}>
         <h1>Increase/Decrease Rows</h1>
         <button onClick={() => UpdateGridSize(true, -1)}>-</button>
         <input onKeyDown={key => handleResizeKeySubmit(true, key)}type="number"/>
         <button onClick={() => UpdateGridSize(true, 1)}>+</button>
       </div>
+
       <div style={{background : "pink", zIndex : 2}}>
         <h1>Increase/Decrease Columns</h1>
         <button onClick={() => UpdateGridSize(false, -1)}>-</button>
         <input onKeyDown={key => handleResizeKeySubmit(false, key)}type="number"/>
         <button onClick={() => UpdateGridSize(false, 1)}>+</button>
       </div>
+
 
 
     </main>
