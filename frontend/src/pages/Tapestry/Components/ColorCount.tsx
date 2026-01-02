@@ -1,10 +1,14 @@
 interface ColorCountProps {
   grid : string[][],
-  crochetType? : string,
+  stitch? : string,
   yarnSize? : number
 }
-import type { Calculations, Stitch, YarnSize } from "../utils/yarnCalcs"
+import type { Stitch, YarnSize } from "../utils/yarnCalcs"
 import yarnCalcs from "../utils/yarnCalcs"
+
+const defaultYarnSize : YarnSize = 4;
+const defaultStitch : Stitch = "sc"
+import ColorBlock from "./ColorBlock";
 
 export default function ColorCount(props : ColorCountProps){
     const colors : string[] = []
@@ -24,15 +28,16 @@ export default function ColorCount(props : ColorCountProps){
       })
     )
     
-    function Yardage(index : number){
+    function Yardage(colorIdx : number){
       // Gets which stitch calculations to do
-      const yarnSize : YarnSize = (Number(props.yarnSize) as YarnSize) || 4;
-      const crochetType : Stitch = (props.crochetType as Stitch) || "sc";
-      const lengthPerStich : number = yarnCalcs[yarnSize]?.[crochetType];
+      const yarnSize : YarnSize = (Number(props.yarnSize) as YarnSize) || defaultYarnSize;
+      const stitch : Stitch = (props.stitch as Stitch) || defaultStitch;
+      const lengthPerStich : number = yarnCalcs[yarnSize]?.[stitch];
 
       // Calculates inches/yards needed
-      const inches = lengthPerStich * colorsAmt[index]
+      const inches = lengthPerStich * colorsAmt[colorIdx]
       const yards = inches / 36;
+
       return <p>{`${inches} inches / ${yards.toFixed(2)} yards`}</p>
 
     }
@@ -42,14 +47,7 @@ export default function ColorCount(props : ColorCountProps){
         {colors.map((value, idx) => {
           return (
             <div className="flex gap-4 items-center">
-              <div
-                style={{
-                  width : 20,
-                  height : 20,
-                  backgroundColor : value,
-                  border : "1px solid black"
-                }}
-              />
+              <ColorBlock color={value} size={20}/>
 
               <p>{`${colorsAmt[idx]}`}</p>
               {Yardage(idx)}
