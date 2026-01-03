@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ColorCount from "./Components/ColorCount";
 import Instructions from "./Components/Instructions";
+import Grid from "./Components/Grid";
 
 function Tapestry() {
   const id = Number(useParams().id) || -1;
@@ -18,6 +19,9 @@ function Tapestry() {
       setGrid(localGrid != null ? JSON.parse(localGrid) : []);
     } else {
       // Fetch from database using id
+
+
+
     }
   }, [])
 
@@ -61,30 +65,7 @@ function Tapestry() {
     <main>
       <h1>Tapestry Page</h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns : `repeat(${grid[0] ? grid[0].length : 0}, 20px)`,
-          userSelect: "none"
-        }}
-      >
-        {
-          grid.map((row, r) =>
-            row.map((pixel, c) => (
-              <div
-                key={`${r}-${c}`}
-                style={{
-                  width : 20,
-                  height : 20,
-                  border : "0.5px solid grey",
-                  background : pixel
-                }}
-              />
-            ))
-          )
-        }
-      </div>
-      
+      <Grid grid={grid} size={20}/>      
       <div>
         <h1>List of Colors</h1>
         <button onClick={() => UpdateRow(-1)}>Back 1 row</button>

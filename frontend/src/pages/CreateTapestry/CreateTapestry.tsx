@@ -99,14 +99,25 @@ function CreateTapestry() {
     
   }
 
-  function SaveGrid(){
+  async function SaveGrid(){
     // Check if user is logged in
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}verifyLogin`, {
+      headers : {
+        "Authorization" : `bearer ${localStorage.getItem("token")}`
+      }
+    })
 
-    // If logged in, send to CreateProject and pass in grid as a prop
+    if (response.status !== 200) {
+      // User not logged in, send to Tapestry
+      console.log("User is not logged in, going to")
+      localStorage.setItem("grid", JSON.stringify(grid));
+      Navigate("/tapestry/-1");
+    } else {
+      // User logged in, send to CreateProject
+      console.log("User is logged in, navigating to create Project")
+      Navigate("/create-project", {state : {grid : grid}})
+    }
 
-    // If not, save grid to localStorage and sent to Tapestry
-    localStorage.setItem("grid", JSON.stringify(grid));
-    Navigate("/tapestry/-1");
   }
 
   //Event handlers

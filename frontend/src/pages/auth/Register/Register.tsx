@@ -21,8 +21,11 @@ function Register() {
       },
       body: JSON.stringify(user)
     });
-    const data = await response.text();
-    console.log('Response from backend:', data);
+    const data = await response.json();
+    console.log('Response from backend:', data.token);
+
+    // Save token to localStorage
+    if (data.token) localStorage.setItem("token", data.token)
 
 
   }

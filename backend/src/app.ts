@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
   res.send('Pixel Stitch Backend is running');
 });
 
+app.get('/verifyLogin', verifyToken, (req, res) => {
+  // Went past verifyToken --> user is logged in
+  res.status(200).send("User Logged in");
+})
+
 
 
 export default app;

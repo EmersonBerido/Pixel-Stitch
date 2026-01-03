@@ -20,7 +20,9 @@ function Login() {
       .then(response => response.json())
       .then(data => {
         console.log('Response from backend:', data);
+        
         // Handle successful login, e.g., store JWT token
+        if (data.token) localStorage.setItem("token", data.token);
       })
       .catch(error => {
         console.error('Error during login:', error);
