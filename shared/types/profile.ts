@@ -1,6 +1,6 @@
 import { Project } from "./project";
 
-export interface profile {
+export interface Profile {
   email: string;
   username: string;
   bio?: string;

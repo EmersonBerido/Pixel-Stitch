@@ -1,24 +1,52 @@
 import { useLocation } from "react-router-dom";
+import type {Project} from "../../../../shared/types/project"
 
 import Grid from "../Tapestry/Components/Grid";
+import { useState } from "react";
 function CreateProject() {
+  const [isVisible, setIsVisible] = useState<string>("public")
   const {state} = useLocation()
   console.log("state:", state);
   const grid : string[][] = state.grid;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget);
 
-    console.log(formData)
     const name : string = formData.get("project_name") as string;
     const description : string = formData.get("project_description") as string;
-    const isVisible : boolean = 
+    const visibility : boolean = 
       (formData.get("visibility") as string) === "public" ?
       true : false;
     const createdTime : Date = new Date();
     const updatedTime = createdTime;
+
+    const body = {
+      projectName : name,
+      description : description,
+      createdAt : createdTime,
+      updatedAt : updatedTime,
+      isVisible : visibility,
+      grid : grid
+    }
+
+    try {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}projects/create`, {
+        method : "POST",
+        headers : {
+          "Content-Type" : "application/json",
+          "Authorization" : `Bearer ${localStorage.getItem("token")}`
+        },
+        body : JSON.stringify(body)
+      })
+        .then(response => response.text())
+        .then(text => console.log(text))
+    } catch (err) {
+      console.log(err)
+    }
+
+
 
     // Backend will need:
     // Email (from token)
@@ -46,9 +74,10 @@ function CreateProject() {
         <textarea rows={4} name="project_description" placeholder="Description..." required/>
         
         <select 
-        value={"public"}
+        value={isVisible}
         required
-        name={"visibility"}
+        name="visibility"
+        onChange={event => setIsVisible(event.target.value)}
         >
           <option value={"public"}>Public</option>
           <option value={"private"}>Private</option>

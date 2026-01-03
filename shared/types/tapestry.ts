@@ -1,4 +1,4 @@
-export interface tapestry {
-  id: number;
+export interface Tapestry {
+  id?: number;
   grid: number[][];
 }

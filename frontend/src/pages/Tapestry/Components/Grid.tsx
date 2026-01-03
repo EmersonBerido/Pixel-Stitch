@@ -15,7 +15,7 @@ export default function Grid(props : GridProps) {
           props.grid.map((row, r) =>
             row.map((pixel, c) => (
               <div
-                key={`${r}-${c}`}
+                key={`Pixel: ${r}-${c}`}
                 style={{
                   width : props.size,
                   height : props.size,

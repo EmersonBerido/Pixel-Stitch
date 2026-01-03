@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-
+import type {Project} from "../../../shared/types/project"
+import jwt from "jsonwebtoken";
+import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB } from "../db/projects/projects.db";
+import { Tapestry } from "../../../shared/types/tapestry";
 function getProject(req: Request, res: Response) {
   // TODO: Implement get project by ID logic
   // Get user ID from req.params
@@ -18,15 +21,39 @@ function getProject(req: Request, res: Response) {
   res.send('Get project by ID route');
 }
 
-function createProject(req: Request, res: Response) {
+// export interface Project {
+//   id?: number;
+//   userEmail?: string;
+//   projectName: string;
+//   tapestryId?: number;
+//   description: string;
+//   isComplete?: boolean;
+//   isVisible : boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
+
+async function createProject(req: Request, res: Response) {
   // TODO: Implement create project logic
 
-  // Get project details from req.body
+  // Get Project info
+  const project : Project = req.body as Project
+  project.isComplete = false;
+  project.userEmail = req.user.email;
+  const grid : string[][] = req.body.grid;
 
-  // Save project to database
+  // Save Tapestry to table & get ID
+  const tapestryId = await addTapestryDB(grid);
+  if (tapestryId < 0) res.status(400).send("Failed to add Tapestry");
+  project.tapestryId = tapestryId;
+
+  // Save project to database (create a function for db [addProject])
+  const projectId = await addProjectDB(project);
+  if (projectId < 0) res.status(400).send("Failed to add Project");
+
 
   // Return success response with project ID
-  res.send('Create project route');
+  res.status(200).send(projectId);
 }
 
 export { getProject, createProject };
