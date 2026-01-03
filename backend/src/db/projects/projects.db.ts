@@ -36,7 +36,7 @@ async function addProjectDB(project : Project) {
       updated_at : project.updatedAt,
       current_row : 0
     }])
-    .select()
+    .select();
 
   if (error) return -1
 
@@ -46,13 +46,44 @@ async function addProjectDB(project : Project) {
 }
 
 // Returns Project type object, NULL if failed
-async function getProjectDB() {
+async function getProjectDB(projectID : number, email : string) : Promise<Project | null> {
+  const {data, error} = await supabase
+    .from("Projects")
+    .select("*")
+    .eq("user_email", email)
+    .eq("id", projectID)
+    .single();
+  
+  if (error) return null
+
+  return data as Project;
 
 }
 
-// Returns String [][]
-async function getTapestryDB() {
+async function getAllProjectsDB(email : string) : Promise<Project[] | null> {
+  const {data, error} = await supabase
+    .from("Projects")
+    .select("*")
+    .eq("user_email", email) as { data : Project[] | null, error : any};
+  
+  if (error) return null
+
+  return data
 
 }
 
-export {addTapestryDB, getTapestryDB, addProjectDB, getProjectDB}
+// Returns String [][], NULL if failed
+async function getTapestryDB(tapestryID : number) : Promise<string[][] | null> {
+  const {data, error} = await supabase
+    .from("Tapestries")
+    .select("*")
+    .eq("id", tapestryID)
+    .single();
+  
+  
+  if (error) return null // IDK what it should return on failure
+
+  return data.grid as string[][]
+}
+
+export {addTapestryDB, getTapestryDB, addProjectDB, getProjectDB, getAllProjectsDB}

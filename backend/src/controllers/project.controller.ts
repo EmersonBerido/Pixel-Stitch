@@ -1,37 +1,34 @@
 import { Request, Response, NextFunction } from "express";
 import type {Project} from "../../../shared/types/project"
 import jwt from "jsonwebtoken";
-import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB } from "../db/projects/projects.db";
-import { Tapestry } from "../../../shared/types/tapestry";
-function getProject(req: Request, res: Response) {
-  // TODO: Implement get project by ID logic
-  // Get user ID from req.params
+import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB, getAllProjectsDB } from "../db/projects/projects.db";
 
-  // Get project ID from req.query
 
-  // Find project in database
+async function getAllProjects(req: Request, res: Response) {
+  // Get user email from req.user
+  const email = req.user.emaill
 
-  // If not found, return 404 Not Found
+  // Find all projects in database
+  const projectList : Project[] | null = await getAllProjectsDB(email);
+  if (!projectList) res.status(404).send("Projects Not Found")
 
-  // Verify that the project belongs to the user
+  // Return all project details to frontend
+  return res.status(200).json(projectList);
 
-  // If not authorized, return 403 Forbidden
-
-  // Return project details
-  res.send('Get project by ID route');
 }
 
-// export interface Project {
-//   id?: number;
-//   userEmail?: string;
-//   projectName: string;
-//   tapestryId?: number;
-//   description: string;
-//   isComplete?: boolean;
-//   isVisible : boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
+async function getProject(req : Request, res : Response) {
+  // Get id from params
+  const projectID : number = Number(req.params.projectID);
+  console.log("projectID:", projectID)
+
+  // Get project from database 
+  const project : Project | null = await getProjectDB(projectID, req.user.email)
+  if (!project) res.status(404).send("Project Not Found");
+
+  // Return project to frontend
+  return res.status(200).json(project);
+}
 
 async function createProject(req: Request, res: Response) {
   // TODO: Implement create project logic
@@ -56,4 +53,4 @@ async function createProject(req: Request, res: Response) {
   res.status(200).send(projectId);
 }
 
-export { getProject, createProject };
+export { getAllProjects, getProject, createProject };
