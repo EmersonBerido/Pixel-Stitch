@@ -1,73 +1,87 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Pixel Stitch
+A full‑stack web application for designing, managing, and generating tapestry crochet patterns. Users can create pixel‑based tapestry grids, view color usage, generate row‑by‑row instructions, and manage their crochet projects in a clean, intuitive interface.
+This project blends creativity with engineering — offering a tool that feels playful, powerful, and practical for makers of all levels.
 
-Currently, two official plugins are available:
+## ✨ Features
+### 🎨 Pixel‑Based Tapestry Designer
+- Interactive grid editor
+- Click‑and‑drag painting
+- Integrated color picker
+- Real‑time color name lookup
+- Inline color swatches in instructions
+### 🧵 Smart Crochet Instruction Generator
+- Generates row‑by‑row tapestry instructions
+- Handles front‑side and back‑side rows
+- Includes color changes, stitch counts, and turn instructions
+- Inline color blocks for visual clarity
+### 📦 Project Management
+- Create and save tapestry projects
+- Local storage support for guest mode
+- Database persistence for logged‑in users
+### 📊 Color Usage Breakdown
+- Automatic color counting
+- Displays hex, name, and total stitches
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
+### Frontend
+- React (Vite)
+- TypeScript
+- CSS Modules / custom styling
+- React Router
+### Backend
+- Node.js + Express
+- REST API
+- Supabase
+### Utilities
+- Custom color‑name lookup
+- Yarn usage + stitch math
+- Instruction generation engine
 
-## React Compiler
+## 🚧 Remaining Work
+These are the final pieces needed before the project is feature‑complete:
+### 1. Project List View
+- Display all user projects
+- Include thumbnails, titles, and quick actions
+- Sorting + filtering (optional)
+### 2. Profile View
+- User info
+- Saved projects
+- Account settings
+### 3. Update Project Flow
+- Edit project metadata
+- Update grid
+- Save changes to database
+### 4. Frontend Integration + Styling
+- Final CSS pass
+- Responsive layout
+- Consistent UI components
+- Polished color palette + spacing
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ▶️ Getting Started
+Install dependencies
+npm install
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Run the client
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Run the server
+```bash
+npm run dev
 ```
+
+
+Environment Variables
+```txt
+Create a .env file in /server:
+PORT=5000
+DATABASE_URL=...
+JWT_SECRET=...
+```
+
+
+### 💡 Vision
+Pixel Stitch aims to be the most intuitive, maker‑friendly tapestry crochet tool on the web — blending technical precision with creative freedom. Whether you're designing a simple motif or a full graphghan, this tool helps you bring your ideas to life stitch by stitch.
