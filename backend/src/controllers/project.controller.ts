@@ -24,6 +24,7 @@ async function getProject(req : Request, res : Response) {
 
   // Get project from database 
   const project : Project | null = await getProjectDB(projectID, req.user.email)
+  console.log(req.user.email)
   if (!project) res.status(404).send("Project Not Found");
 
   // Return project to frontend
@@ -51,6 +52,12 @@ async function createProject(req: Request, res: Response) {
 
   // Return success response with project ID
   res.status(200).send(projectId);
+}
+
+async function updateProject(req : Request, res : Response) {
+  // Get Project ID from req.params
+  // Update project details from body
+
 }
 
 export { getAllProjects, getProject, createProject };

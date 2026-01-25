@@ -9,20 +9,37 @@ function Tapestry() {
   const [grid, setGrid] = useState<string[][]>([]);
   const [currRow, setCurrRow] = useState<number>(-1);
 
+  console.log(grid)
   // Get Grid
   useEffect(() => {
-    // Negative id is reserved for guest tapestry
+    (async () => {
+      // Negative id is reserved for guest tapestry
+  
+      // if guest tapestry, fetch from localStorage, else, fetch from database
+      if (id < 0) {
+        const localGrid = localStorage.getItem("grid");
+        setGrid(localGrid != null ? JSON.parse(localGrid) : []);
+      } else {
+        // Fetch from database using id
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}tapestries/${id}`, {
+          method : "GET",
+          headers : {
+            "Authorization" : `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        console.log(response)
+        
+        if (response.status !== 200) {
+          alert("No Tapestry exist");
+        }
+        else {
+          const data = await response.json();
+          console.log(data)
+          setGrid(data);
+        }
+      }
 
-    // if guest tapestry, fetch from localStorage, else, fetch from database
-    if (id < 0) {
-      const localGrid = localStorage.getItem("grid");
-      setGrid(localGrid != null ? JSON.parse(localGrid) : []);
-    } else {
-      // Fetch from database using id
-
-
-
-    }
+    })();
   }, [])
 
   function UpdateRow(change : number) {
@@ -34,7 +51,10 @@ function Tapestry() {
   }
 
   function printInstructions(){
+    if (grid.length === 0) return null;
+
     if (currRow < 0){
+
       return <Instructions
         row={grid[0]}
           stitch="sc"
@@ -43,7 +63,9 @@ function Tapestry() {
           frontSide={true}
           rowLength={grid[0].length}
       />
+
     } else if (currRow < grid.length) {
+
       return <Instructions
         row={grid[currRow]}
           stitch="sc"
@@ -52,6 +74,7 @@ function Tapestry() {
           frontSide={true}
           rowLength={grid[0].length}
       />
+      
     }
     else {
       return <></>
@@ -65,16 +88,22 @@ function Tapestry() {
     <main>
       <h1>Tapestry Page</h1>
 
-      <Grid grid={grid} size={20}/>      
-      <div>
-        <h1>List of Colors</h1>
-        <button onClick={() => UpdateRow(-1)}>Back 1 row</button>
-        <button onClick={() => UpdateRow(1)}>Up 1 row</button>
-        <ColorCount grid={grid}/>
-        {grid[0] &&
-          printInstructions()
-        }
-      </div>
+      {grid && grid.length > 0 &&
+        <>
+          <Grid grid={grid} size={20}/>      
+          <div>
+            <h1>List of Colors</h1>
+            <button onClick={() => UpdateRow(-1)}>Back 1 row</button>
+            <button onClick={() => UpdateRow(1)}>Up 1 row</button>
+            <ColorCount grid={grid}/>
+            {grid.length > 0 &&
+              printInstructions()
+            }
+          </div>
+
+        </>
+      }
+      
 
 
     </main>

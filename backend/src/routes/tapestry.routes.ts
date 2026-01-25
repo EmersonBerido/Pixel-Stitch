@@ -1,11 +1,11 @@
 import {Router} from 'express';
-import { createTapestry, getTapestry, updateTapestry, deleteTapestry } from '../controllers/tapestry.controller';
+import { getTapestry, updateTapestry, deleteTapestry } from '../controllers/tapestry.controller';
+import { verifyToken } from '../middleware/authentication';
 
 const router = Router();
 
-router.post('/', createTapestry);
-router.get('/:id', getTapestry);
-router.patch('/:id', updateTapestry);
-router.delete('/:id', deleteTapestry);
+router.get('/:id', verifyToken, getTapestry);
+router.patch('/:id', verifyToken, updateTapestry);
+router.delete('/:id', verifyToken, deleteTapestry);
 
 export default router;

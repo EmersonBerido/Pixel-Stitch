@@ -3,7 +3,6 @@ import bcryptjs from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import { Request, Response } from "express";
 import { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail } from "../db/users/users.db";
-import { decode } from 'node:punycode';
 
 async function authLogin(req: Request, res: Response) {
   const { email, password } = req.body;

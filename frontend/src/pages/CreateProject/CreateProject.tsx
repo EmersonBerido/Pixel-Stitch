@@ -1,13 +1,14 @@
 import { useLocation } from "react-router-dom";
-import type {Project} from "../../../../shared/types/project"
 
 import Grid from "../Tapestry/Components/Grid";
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
+
 function CreateProject() {
   const [isVisible, setIsVisible] = useState<string>("public")
   const {state} = useLocation()
-  console.log("state:", state);
   const grid : string[][] = state.grid;
+  const Navigate = useNavigate();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -41,7 +42,8 @@ function CreateProject() {
         body : JSON.stringify(body)
       })
         .then(response => response.text())
-        .then(text => console.log(text))
+        .then(projID => console.log("Created project with ID:", projID));
+            
     } catch (err) {
       console.log(err)
     }
