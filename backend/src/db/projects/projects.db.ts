@@ -4,12 +4,14 @@ import { supabase } from "../../supabaseClient";
 // Note : the tapestry's grid will be a jsonb type for postgres
 
 // Returns TapestryID, -1 if failed
-async function addTapestryDB(tapestry : string[][]){
+async function addTapestryDB(tapestry : string[][], is_public : boolean, email : string = "") : Promise<number> {
   const {data, error} = await supabase
     .from("Tapestries")
     .insert([
       {
-        grid : tapestry
+        grid : tapestry,
+        user_email : email,
+        is_public : is_public
       }
     ])
     .select();

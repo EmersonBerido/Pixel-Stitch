@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import type {Project} from "../../../shared/types/project"
 import jwt from "jsonwebtoken";
 import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB, getAllProjectsDB } from "../db/projects/projects.db";
+import { getIdByEmail, pushProjectList } from "../db/users/users.db";
 
 
 async function getAllProjects(req: Request, res: Response) {
@@ -41,17 +42,22 @@ async function createProject(req: Request, res: Response) {
   const grid : string[][] = req.body.grid;
 
   // Save Tapestry to table & get ID
-  const tapestryId = await addTapestryDB(grid);
+  const tapestryId = await addTapestryDB(grid, project.isVisible, req.user.email);
   if (tapestryId < 0) res.status(400).send("Failed to add Tapestry");
   project.tapestryId = tapestryId;
 
-  // Save project to database (create a function for db [addProject])
+  // Save project to database
   const projectId = await addProjectDB(project);
   if (projectId < 0) res.status(400).send("Failed to add Project");
 
+  // Attach project ID to user's project list
+  const userId = await getIdByEmail(req.user.email);
+  if (userId === null) res.status(400).send("Failed to get User ID");
+  const pushSuccess = await pushProjectList(userId, projectId);
+  if (!pushSuccess) res.status(400).send("Failed to update User's Project List");
 
-  // Return success response with project ID
-  res.status(200).send(projectId);
+  // Return success response with project's tapestry ID
+  res.status(200).send(tapestryId);
 }
 
 async function updateProject(req : Request, res : Response) {

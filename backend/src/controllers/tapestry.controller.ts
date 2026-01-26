@@ -2,11 +2,10 @@ import { Request, Response} from "express";
 import { getTapestryDB, updateTapestryDB, deleteTapestryDB } from "../db/tapestries/tapestries.db";
 
 async function getTapestry(req: Request, res: Response) {
-  // TODO: Fetch and return a tapestry by ID  
-  console.log("hi")
   const tapestryID : number = Number(req.params.id);
-  
-  const tapestry : string[][] | null = await getTapestryDB(tapestryID, req.user.email);
+  const userEmail = req.user ? req.user.email : "";
+
+  const tapestry : string[][] | null = await getTapestryDB(tapestryID, userEmail);
   if (!tapestry) return res.status(404).send("Tapestry not found");
 
   // Return tapestry grid data

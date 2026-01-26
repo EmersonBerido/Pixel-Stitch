@@ -88,4 +88,45 @@ async function changePasswordByEmail(email: string, newHashedPassword: string) {
   return true;
 }
 
-export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail };
+async function pushProjectList(userID: number, projectID: number){
+  // Get original list of project IDs
+  const { data, error } = await supabase
+    .from("Users")
+    .select("project_list")
+    .eq("id", userID)
+    .single();
+  
+  if (error || !data.project_list) return false;
+
+  const updatedList : number[] = [... (data.project_list ?? []), projectID];
+
+  await supabase
+    .from("Users")
+    .update({ project_list : updatedList })
+    .eq("id", userID);
+  
+  return true;
+}
+
+async function popProjectList(userID: number, projectID: number){
+  // Get original list of project IDs
+  const { data, error } = await supabase
+    .from("Users")
+    .select("project_list")
+    .eq("id", userID)
+    .single();
+
+  if (error || !data.project_list) return false;
+  if (data.project_list.length === 0) return true;
+
+  const updatedList : number[] = data.project_list.filter((id : number) => id !== projectID);
+
+  await supabase
+    .from("Users")
+    .update({ project_list : updatedList })
+    .eq("id", userID);
+
+  return true;
+}
+
+export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail, pushProjectList, popProjectList };

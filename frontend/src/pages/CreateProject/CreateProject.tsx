@@ -8,7 +8,7 @@ function CreateProject() {
   const [isVisible, setIsVisible] = useState<string>("public")
   const {state} = useLocation()
   const grid : string[][] = state.grid;
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -42,7 +42,7 @@ function CreateProject() {
         body : JSON.stringify(body)
       })
         .then(response => response.text())
-        .then(projID => console.log("Created project with ID:", projID));
+        .then(tapestryID => navigate(`/tapestry/${tapestryID}`));
             
     } catch (err) {
       console.log(err)
