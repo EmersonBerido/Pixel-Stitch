@@ -1,12 +1,11 @@
 import NavBar from "../../components/NavBar/NavBar";
-
-function NotFound() {
+function Settings() {
   return (
     <main>
       <NavBar />
-      <h1>404 - Page Not Found</h1>
+      <h1>Settings Page</h1>
     </main>
   )
 }
 
-export default NotFound;
+export default Settings;

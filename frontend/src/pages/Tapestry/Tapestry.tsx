@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import ColorCount from "./Components/ColorCount";
 import Instructions from "./Components/Instructions";
 import Grid from "./Components/Grid";
+import NavBar from "../../components/NavBar/NavBar";
 
 // TODO:
 /*
@@ -89,6 +90,7 @@ function Tapestry() {
   
   return (
     <main>
+      <NavBar />
       <h1>Tapestry Page</h1>
 
       {grid && grid.length > 0 &&

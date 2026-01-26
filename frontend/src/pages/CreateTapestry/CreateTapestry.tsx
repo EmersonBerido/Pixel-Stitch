@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {Chrome} from "@uiw/react-color";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../../components/NavBar/NavBar";
 
 function CreateTapestry() {
   const Navigate = useNavigate();
@@ -136,6 +137,7 @@ function CreateTapestry() {
 
   return (
     <main>
+      <NavBar />
       <h1>Create Tapestry</h1>
       <Chrome
         color={currentColor}

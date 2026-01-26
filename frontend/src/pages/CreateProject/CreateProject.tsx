@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Grid from "../Tapestry/Components/Grid";
 import { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom';
+import NavBar from "../../components/NavBar/NavBar";
 
 function CreateProject() {
   const [isVisible, setIsVisible] = useState<string>("public")
@@ -76,24 +77,25 @@ function CreateProject() {
 
   return (
     <main>
-      <h1>Create Project Page</h1>
-      {state.grid && <Grid grid={grid} size={6}/>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="project_name" placeholder="Project Name" required/>
+        <NavBar />
+        <h1>Create Project Page</h1>
+        {state.grid && <Grid grid={grid} size={6}/>}
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="project_name" placeholder="Project Name" required/>
 
-        <textarea rows={4} name="project_description" placeholder="Description..." required/>
-        
-        <select 
-        value={isVisible}
-        required
-        name="visibility"
-        onChange={event => setIsVisible(event.target.value)}
-        >
-          <option value={"public"}>Public</option>
-          <option value={"private"}>Private</option>
-        </select>
-        <button type="submit">Submit</button>
-      </form>
+          <textarea rows={4} name="project_description" placeholder="Description..." required/>
+          
+          <select 
+          value={isVisible}
+          required
+          name="visibility"
+          onChange={event => setIsVisible(event.target.value)}
+          >
+            <option value={"public"}>Public</option>
+            <option value={"private"}>Private</option>
+          </select>
+          <button type="submit">Submit</button>
+        </form>
 
     </main>
   )

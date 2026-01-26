@@ -1,12 +1,14 @@
+// Overview of all Projects/Tapestries
+
 import NavBar from "../../components/NavBar/NavBar";
 
-function NotFound() {
+function Gallery() {
   return (
     <main>
       <NavBar />
-      <h1>404 - Page Not Found</h1>
+      <h1>Gallery Page</h1>
     </main>
   )
 }
 
-export default NotFound;
+export default Gallery;
