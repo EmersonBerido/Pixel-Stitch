@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import type {Project} from "../../../shared/types/project"
 import jwt from "jsonwebtoken";
-import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB, getAllProjectsDB } from "../db/projects/projects.db";
+import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB, getAllProjectsDB, updateCurrRowDB, updateProjectDetailsDB } from "../db/projects/projects.db";
 import { getIdByEmail, pushProjectList } from "../db/users/users.db";
 
 
@@ -60,10 +60,46 @@ async function createProject(req: Request, res: Response) {
   res.status(200).send(tapestryId);
 }
 
-async function updateProject(req : Request, res : Response) {
-  // Get Project ID from req.params
-  // Update project details from body
+/*
+- Update project details
+- Called in Project Edit mode
+- Can update everything except ID, userEmail, tapestryId
+*/
+async function updateProjectDetails(req : Request, res : Response) {
+  const {project_name, description, is_complete, visibility} = req.body;
+  const projectID : number = Number(req.params.projectID);
+
+  if (projectID < 0) return res.status(400).send("Invalid Project ID");
+  if (!project_name || !description || is_complete === undefined || visibility === undefined) 
+    return res.status(400).send("Missing project details");
+
+  const updatedProject : Partial<Project> = {
+    projectName : project_name,
+    description : description,
+    isComplete : is_complete,
+    isVisible : visibility,
+  }
+
+  const updateSuccess = await updateProjectDetailsDB(projectID, updatedProject);
+
+  if (!updateSuccess) return res.status(500).send("Failed to update project details");
+  return res.status(200).send("Project details updated successfully");
 
 }
 
-export { getAllProjects, getProject, createProject };
+// Update only the currentRow of a project
+// Called only in Instruction mode
+async function updateProjectCurrentRow(req : Request, res : Response) {
+  // Get Project ID from req.params
+  const {projID, newCurrRow} = req.body;
+
+  if (projID < 0) return res.status(400).send("Invalid Project ID");
+  if (newCurrRow < 0) return res.status(400).send("Invalid currentRow value");
+
+  const updateSuccess = await updateCurrRowDB(projID, newCurrRow);
+  if (!updateSuccess) return res.status(500).send("Failed to update currentRow");
+  return res.status(200).send("currentRow updated successfully");
+
+}
+
+export { getAllProjects, getProject, createProject, updateProjectCurrentRow, updateProjectDetails };

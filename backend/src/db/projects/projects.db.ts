@@ -88,4 +88,34 @@ async function getTapestryDB(tapestryID : number) : Promise<string[][] | null> {
   return data.grid as string[][]
 }
 
-export {addTapestryDB, getTapestryDB, addProjectDB, getProjectDB, getAllProjectsDB}
+async function updateCurrRowDB(id : number, newRow : number) {
+  if (newRow < 0) return false;
+
+  const {data, error} = await supabase
+    .from("Projects")
+    .update({
+      current_row : newRow
+    })
+    .eq("id", id)
+
+  return !error;
+}
+
+async function updateProjectDetailsDB(id : number, updatedProject : Partial<Project>) {
+  if (!updatedProject) return false;
+
+  const newDate = new Date();
+
+  const {data, error} = await supabase
+    .from("Projects")
+    .update({
+      project_name : updatedProject.projectName,
+      description : updatedProject.description,
+      is_complete : updatedProject.isComplete,
+      visibility : updatedProject.isVisible,
+      updated_at : newDate
+    })
+    .eq("id", id)
+}
+
+export {addTapestryDB, getTapestryDB, addProjectDB, getProjectDB, getAllProjectsDB, updateCurrRowDB, updateProjectDetailsDB}
