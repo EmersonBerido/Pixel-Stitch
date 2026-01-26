@@ -10,6 +10,7 @@ import Projects from './pages/Projects/Projects.tsx';
 import CreateTapestry from './pages/CreateTapestry/CreateTapestry.tsx';
 import Tapestry from './pages/Tapestry/Tapestry.tsx';
 import NotFound from './pages/NotFound/NotFound.tsx';
+import ProtectedRoute from './pages/ProtectedRoute/ProtectedRoute.tsx';
 
 export default function App() {
   return (
@@ -19,9 +20,9 @@ export default function App() {
       <Route path='/register' element={<Register />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
       <Route path='/reset-password/:token' element={<ResetPassword />} />
-      <Route path='/profile' element={<Profile />} />
-      <Route path='/projects' element={<Projects />} />
-      <Route path='/create-project' element={<CreateProject />} />
+      <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path='/projects' element={<ProtectedRoute><Projects /></ProtectedRoute>} />
+      <Route path='/create-project' element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
       <Route path='/create-tapestry' element={<CreateTapestry/>} />
       <Route path='/tapestry/:id' element={<Tapestry />} />
       <Route path='*' element={<NotFound />} />

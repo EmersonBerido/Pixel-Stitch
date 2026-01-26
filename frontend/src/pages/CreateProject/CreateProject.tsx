@@ -1,14 +1,22 @@
 import { useLocation } from "react-router-dom";
 
 import Grid from "../Tapestry/Components/Grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom';
 
 function CreateProject() {
   const [isVisible, setIsVisible] = useState<string>("public")
   const {state} = useLocation()
-  const grid : string[][] = state.grid;
   const navigate = useNavigate();
+  
+  
+  useEffect(() => {
+    if (!state || !state.grid) navigate("/create-tapestry")
+  }, [navigate, state]);
+
+  if (!state || !state.grid) return null;
+  
+  const grid : string[][] = state.grid;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()

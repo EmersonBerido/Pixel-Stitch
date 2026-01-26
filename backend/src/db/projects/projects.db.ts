@@ -62,11 +62,14 @@ async function getProjectDB(projectID : number, email : string) : Promise<Projec
 
 }
 
-async function getAllProjectsDB(email : string) : Promise<Project[] | null> {
+async function getAllProjectsDB(projectList : number[]) : Promise<Project[] | null> {
+  // Update this to use the user's project list later
+
+
   const {data, error} = await supabase
     .from("Projects")
     .select("*")
-    .eq("user_email", email) as { data : Project[] | null, error : any};
+    .in("id", projectList);
   
   if (error) return null
 

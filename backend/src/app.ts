@@ -24,8 +24,9 @@ app.get('/', (req, res) => {
   res.send('Pixel Stitch Backend is running');
 });
 
-app.get('/verifyLogin', verifyToken, (req, res) => {
+app.get('/verify-token', verifyToken, (req, res) => {
   // Went past verifyToken --> user is logged in
+  console.log("User logged in:", req.user.email);
   res.status(200).send("User Logged in");
 })
 

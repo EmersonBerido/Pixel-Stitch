@@ -101,7 +101,7 @@ function CreateTapestry() {
 
   async function SaveGrid(){
     // Check if user is logged in
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}verifyLogin`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}verify-token`, {
       headers : {
         "Authorization" : `bearer ${localStorage.getItem("token")}`
       }

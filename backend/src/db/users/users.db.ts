@@ -88,6 +88,21 @@ async function changePasswordByEmail(email: string, newHashedPassword: string) {
   return true;
 }
 
+async function getProjectList(userID: number) : Promise<number[] | null> {
+  const { data, error } = await supabase
+    .from("Users")
+    .select("project_list")
+    .eq("id", userID)
+    .single();
+
+  if (error) {
+    console.error('Error fetching project list by user ID:', error);
+    return null;
+  }
+
+  return data ? data.project_list : null;
+}
+
 async function pushProjectList(userID: number, projectID: number){
   // Get original list of project IDs
   const { data, error } = await supabase
@@ -129,4 +144,4 @@ async function popProjectList(userID: number, projectID: number){
   return true;
 }
 
-export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail, pushProjectList, popProjectList };
+export { findUserByEmail, addUser, verifyUserCredentials, getIdByEmail, changePasswordByEmail, getProjectList, pushProjectList, popProjectList };

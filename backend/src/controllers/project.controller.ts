@@ -2,15 +2,20 @@ import { Request, Response, NextFunction } from "express";
 import type {Project} from "../../../shared/types/project"
 import jwt from "jsonwebtoken";
 import { getTapestryDB, addTapestryDB, getProjectDB, addProjectDB, getAllProjectsDB, updateCurrRowDB, updateProjectDetailsDB } from "../db/projects/projects.db";
-import { getIdByEmail, pushProjectList } from "../db/users/users.db";
+import { getIdByEmail, pushProjectList, getProjectList } from "../db/users/users.db";
 
 
 async function getAllProjects(req: Request, res: Response) {
-  // Get user email from req.user
-  const email = req.user.emaill
+  const email = req.user.email;
+
+  // Find user's project list
+  const userId = await getIdByEmail(email);
+  if (userId === null) return res.status(400).send("Failed to get User ID");
+  const projectListIDs = await getProjectList(userId);
+  if (projectListIDs === null) return res.status(404).send("Projects Not Found");
 
   // Find all projects in database
-  const projectList : Project[] | null = await getAllProjectsDB(email);
+  const projectList : Project[] | null = await getAllProjectsDB(projectListIDs);
   if (!projectList) res.status(404).send("Projects Not Found")
 
   // Return all project details to frontend
@@ -90,7 +95,6 @@ async function updateProjectDetails(req : Request, res : Response) {
 // Update only the currentRow of a project
 // Called only in Instruction mode
 async function updateProjectCurrentRow(req : Request, res : Response) {
-  // Get Project ID from req.params
   const {projID, newCurrRow} = req.body;
 
   if (projID < 0) return res.status(400).send("Invalid Project ID");
