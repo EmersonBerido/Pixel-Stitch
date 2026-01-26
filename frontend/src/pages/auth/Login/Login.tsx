@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // Handle login logic here
@@ -29,6 +32,11 @@ function Login() {
       });
   }
 
+  function GuestLogin() {
+    // Clear any existing token
+    localStorage.removeItem("token");
+    navigate("/home");
+  }
   return (
     <main>
       <h1>Login Page</h1>
@@ -37,8 +45,23 @@ function Login() {
         <input type="password" placeholder="Password" name="password" required />
         <button type="submit">Login</button>
       </form>
+
+      <button
+        onClick={() => navigate("/register")}
+      >
+        Register as a new user
+      </button>
+
+      <button
+        onClick={() => navigate("/forgot-password")}
+      >
+        Forgot Password
+      </button>
+
+      <button onClick={() => GuestLogin()}>
+        Continue as Guest
+      </button>
     </main>
   )
-  return <div>Login Page</div>;
 }
 export default Login;

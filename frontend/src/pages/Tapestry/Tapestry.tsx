@@ -4,41 +4,44 @@ import ColorCount from "./Components/ColorCount";
 import Instructions from "./Components/Instructions";
 import Grid from "./Components/Grid";
 
+// TODO:
+/*
+- Add Edit Tapestry functionality (New Page)
+  - Updates the tapestry in the database
+*/
+
 function Tapestry() {
   const id = Number(useParams().id) || -1;
   const [grid, setGrid] = useState<string[][]>([]);
   const [currRow, setCurrRow] = useState<number>(-1);
 
-  console.log(grid)
   // Get Grid
   useEffect(() => {
     (async () => {
       // Negative id is reserved for guest tapestry
   
-      // if guest tapestry, fetch from localStorage, else, fetch from database
+      // Guest User's Tapestry in localStorage
       if (id < 0) {
         const localGrid = localStorage.getItem("grid");
         setGrid(localGrid != null ? JSON.parse(localGrid) : []);
+    
       } else {
-        // Fetch from database using id
+        // Registered User's Tapestry from backend
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}tapestries/${id}`, {
           method : "GET",
           headers : {
             "Authorization" : `Bearer ${localStorage.getItem("token")}`
           }
         });
-        console.log(response)
         
         if (response.status !== 200) {
           alert("No Tapestry exist");
         }
         else {
           const data = await response.json();
-          console.log(data)
           setGrid(data);
         }
       }
-
     })();
   }, [])
 
