@@ -21,7 +21,7 @@ export default function App() {
       <Route path='/register' element={<Register />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
       <Route path='/reset-password/:token' element={<ResetPassword />} />
-      <Route path='/gallery' element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
+      <Route path='/gallery' element={<Gallery />} />
       <Route path='/project' element={<ProtectedRoute><Project /></ProtectedRoute>} />
       <Route path='/create-project' element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
       <Route path='/create-tapestry' element={<CreateTapestry/>} />

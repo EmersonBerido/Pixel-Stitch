@@ -1,7 +1,9 @@
 type GridProps = {
   grid : string[][],
-  size : number
+  size : number,
+  currRow? : number
 }
+
 export default function Grid(props : GridProps) {
   return props.grid && (
     <div
@@ -12,18 +14,24 @@ export default function Grid(props : GridProps) {
         }}
       >
         {
-          props.grid.map((row, r) =>
-            row.map((pixel, c) => (
+          props.grid.map((row, r) => {
+            let transparency = "";
+            if (props.currRow && r < props.currRow - 1) transparency = "80";
+
+
+
+            return row.map((pixel, c) => (
               <div
                 key={`Pixel: ${r}-${c}`}
                 style={{
                   width : props.size,
                   height : props.size,
                   border : `${props.size > 10 ? 0.5 : 0}px solid grey`,
-                  background : pixel
+                  background : pixel + transparency
                 }}
               />
             ))
+          }
           )
         }
       </div>

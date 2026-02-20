@@ -95,7 +95,7 @@ function Tapestry() {
 
       {grid && grid.length > 0 &&
         <>
-          <Grid grid={grid} size={20}/>      
+          <Grid grid={grid} size={20} currRow={currRow + 1}/>      
           <div>
             <h1>List of Colors</h1>
             <button onClick={() => UpdateRow(-1)}>Back 1 row</button>

@@ -124,7 +124,7 @@ function Instructions(props : Instructions){
     <section>
       <h1>
         Instructions for 
-        {props.currRow >= 0 ? `Row ${props.currRow + 1}` : "Foundation Chain"}
+        {props.currRow >= 0 ? ` Row ${props.currRow + 1}` : " Foundation Chain"}
       </h1>
       {printInstructions()}
     </section>
