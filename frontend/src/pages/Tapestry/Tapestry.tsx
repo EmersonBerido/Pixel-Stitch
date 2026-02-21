@@ -4,6 +4,7 @@ import ColorCount from "./Components/ColorCount";
 import Instructions from "./Components/Instructions";
 import Grid from "./Components/Grid";
 import NavBar from "../../components/NavBar/NavBar";
+import type { Tapestry } from "../../../../shared/types/tapestry";
 
 // TODO:
 /*
@@ -25,6 +26,10 @@ function Tapestry() {
       if (id < 0) {
         const localGrid = localStorage.getItem("grid");
         setGrid(localGrid != null ? JSON.parse(localGrid) : []);
+
+        // Current Row stored in localStorage
+        const localCurrRow = localStorage.getItem("currRow");
+        if (localCurrRow != null) setCurrRow(JSON.parse(localCurrRow));
     
       } else {
         // Registered User's Tapestry from backend
@@ -39,8 +44,12 @@ function Tapestry() {
           alert("No Tapestry exist");
         }
         else {
-          const data = await response.json();
-          setGrid(data);
+          // if token matches, its also sent the current row
+
+          const data : Tapestry = await response.json();
+          const tapestry = data.grid;
+          setGrid(tapestry);
+          if (data.currentRow) setCurrRow(data.currentRow);
         }
       }
     })();

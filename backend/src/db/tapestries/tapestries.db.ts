@@ -1,4 +1,5 @@
 import { supabase } from "../../supabaseClient";
+import type { Tapestry } from "../../../../shared/types/tapestry";
 
 // string[][] returned if email owns tapestry or tapestry is public
 async function getTapestryDB(id : number, email : string) : Promise<string[][] | null>{
@@ -11,7 +12,20 @@ async function getTapestryDB(id : number, email : string) : Promise<string[][] |
 
   if (error || !data) return null;
 
-  return data.grid as string[][];
+  return data.grid;
+}
+
+async function getTapestryCurrentRowDB(id : number, email : string) : Promise<number | null>{
+  const {data, error} = await supabase
+    .from("Tapestries")
+    .select("current_row")
+    .eq("user_email", email)
+    .eq("id", id)
+    .single()
+
+  if (error || !data) return null;
+
+  return data.current_row;
 }
 
 async function updateTapestryDB(id : number, newGrid : string[][]) : Promise<boolean>{
@@ -35,4 +49,4 @@ async function deleteTapestryDB(id : number) : Promise<boolean>{
   return !error;
 }
 
-export {getTapestryDB, updateTapestryDB, deleteTapestryDB}
+export {getTapestryDB, getTapestryCurrentRowDB, updateTapestryDB, deleteTapestryDB}

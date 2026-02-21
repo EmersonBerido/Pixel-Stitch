@@ -39,7 +39,8 @@ function optionalVerifyToken(req : Request, res : Response, next : NextFunction)
     // Invalid token
     if (err) {
       console.error('Token verification error:', err);
-      return res.status(403).json({ message: 'Invalid token' });
+      next(); // Proceed without user info
+      return;
     }
 
     req.user = user; // Attach decoded user info to request
