@@ -5,6 +5,7 @@ import Instructions from "./Components/Instructions";
 import Grid from "./Components/Grid";
 import NavBar from "../../components/NavBar/NavBar";
 import type { Tapestry } from "../../../../shared/types/tapestry";
+import style from "./Tapestry.module.css";
 
 // TODO:
 /*

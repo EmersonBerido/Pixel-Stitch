@@ -1,0 +1,357 @@
+/* GridEditor.module.css — Pixel Stitch */
+
+/* ── Page Layout ── */
+.page {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  grid-template-rows: auto 1fr;
+  min-height: calc(100vh - 68px);
+  gap: 0;
+  background: var(--cream);
+}
+
+@media (max-width: 1100px) {
+  .page {
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Left Panel — Tools ── */
+.toolPanel {
+  background: #fff;
+  border-right: 1.5px solid var(--linen);
+  padding: var(--space-lg);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  animation: fadeUp var(--duration-slow) var(--ease-smooth) both;
+}
+
+.panelSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.panelTitle {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--yarn-sand);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1.5px dashed var(--linen-dark);
+}
+
+/* ── Tool Buttons ── */
+.toolGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.toolBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--linen);
+  background: var(--cream);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--walnut-light);
+  transition:
+    background var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth),
+    transform var(--duration-fast) var(--ease-bounce);
+}
+.toolBtn:hover {
+  background: var(--cream-dark);
+  border-color: var(--linen-dark);
+  transform: translateY(-2px);
+}
+.toolBtn.toolActive {
+  background: var(--yarn-blush);
+  border-color: var(--yarn-rust);
+  color: var(--yarn-rust);
+}
+
+.toolIcon { font-size: 1.3rem; }
+
+/* ── Color Picker Area ── */
+.colorPickerWrapper {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1.5px solid var(--linen-dark);
+  box-shadow: var(--shadow-xs);
+}
+
+.activeColor {
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--linen-dark);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-bounce),
+              box-shadow var(--duration-fast) var(--ease-smooth);
+  box-shadow: var(--shadow-xs);
+}
+.activeColor:hover {
+  transform: scale(1.04);
+  box-shadow: var(--shadow-sm);
+}
+
+.colorName {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  color: var(--walnut-light);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ── Color Palette Swatches ── */
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.swatch {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition:
+    transform var(--duration-fast) var(--ease-bounce),
+    border-color var(--duration-fast) var(--ease-smooth);
+  box-shadow: var(--shadow-xs);
+}
+.swatch:hover { transform: scale(1.15); }
+.swatch.swatchSelected {
+  border-color: var(--walnut);
+  transform: scale(1.15);
+}
+
+/* ── Grid Size Controls ── */
+.sizeControl {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.sizeInput {
+  width: 60px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--linen-dark);
+  background: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--walnut);
+  text-align: center;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-smooth);
+}
+.sizeInput:focus { border-color: var(--yarn-rust); }
+
+.sizeLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--walnut-light);
+}
+
+/* ── Canvas Area ── */
+.canvasArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  overflow: auto;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(200, 168, 130, 0.06) 0%, transparent 70%);
+}
+
+.canvasContainer {
+  position: relative;
+  animation: scaleIn var(--duration-slow) var(--ease-bounce) both;
+}
+
+.gridCanvas {
+  display: grid;
+  border: 2px solid var(--linen-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  cursor: crosshair;
+  user-select: none;
+}
+
+.gridCell {
+  border: 0.5px solid rgba(92, 61, 46, 0.08);
+  transition: filter var(--duration-fast) var(--ease-smooth);
+}
+.gridCell:hover { filter: brightness(0.88); }
+
+/* ── Zoom Controls ── */
+.zoomControls {
+  position: absolute;
+  bottom: -16px;
+  right: 0;
+  display: flex;
+  gap: var(--space-xs);
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--linen);
+}
+
+.zoomBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--cream);
+  color: var(--walnut-light);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--duration-fast) var(--ease-smooth),
+              transform var(--duration-fast) var(--ease-bounce);
+}
+.zoomBtn:hover {
+  background: var(--linen);
+  transform: scale(1.1);
+}
+
+/* ── Right Panel — Instructions ── */
+.infoPanel {
+  background: #fff;
+  border-left: 1.5px solid var(--linen);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeUp var(--duration-slow) var(--ease-smooth) 100ms both;
+}
+
+.infoPanelHeader {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1.5px solid var(--linen);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.infoPanelHeader h3 {
+  font-size: 1rem;
+}
+
+.infoPanelBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+}
+
+/* ── Color Usage Stats ── */
+.colorStat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+.colorStat:hover { background: var(--cream-dark); }
+
+.colorStatDot {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+  border: 1.5px solid rgba(92, 61, 46, 0.1);
+}
+
+.colorStatInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.colorStatName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--walnut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.colorStatHex {
+  font-size: 0.75rem;
+  color: var(--walnut-light);
+  font-family: monospace;
+}
+
+.colorStatCount {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--yarn-rust);
+  background: var(--yarn-blush);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+/* ── Row Instructions ── */
+.instructionRow {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  border: 1.5px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-smooth),
+              background var(--duration-fast) var(--ease-smooth);
+}
+.instructionRow:hover { background: var(--cream-dark); }
+
+.rowLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--yarn-sand);
+  margin-bottom: 3px;
+}
+
+.rowContent {
+  font-size: 0.88rem;
+  color: var(--walnut-light);
+  line-height: 1.5;
+}
+
+.rowColorChip {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin: 0 2px;
+  border: 1px solid rgba(92, 61, 46, 0.15);
+}
+
+.instructionRow.frontRow { border-left: 3px solid var(--sage); }
+.instructionRow.backRow  { border-left: 3px solid var(--lavender); }
