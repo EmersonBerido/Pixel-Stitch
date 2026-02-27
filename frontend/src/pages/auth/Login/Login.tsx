@@ -43,24 +43,26 @@ function Login() {
     <main>
       <h1>Login Page</h1>
       <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" name="email" required />
-        <input type="password" placeholder="Password" name="password" required />
-        <button type="submit">Login</button>
+        <input type="email" placeholder="Email" name="email" required className="input" />
+        <input type="password" placeholder="Password" name="password" required className="input" />
+        <button className="btn btn--primary" type="submit">Login</button>
       </form>
 
       <button
         onClick={() => navigate("/register")}
+        className="btn btn--primary"
       >
         Register as a new user
       </button>
 
       <button
         onClick={() => navigate("/forgot-password")}
+        className="btn btn--secondary"
       >
         Forgot Password
       </button>
 
-      <button onClick={() => GuestLogin()}>
+      <button onClick={() => GuestLogin()} className="btn btn--ghost btn--sm">
         Continue as Guest
       </button>
     </main>
